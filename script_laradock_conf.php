@@ -3,7 +3,7 @@
 
 class Laradock
 {
-    const SOURCE = '/home/hermes/pluggto/laradock/nginx/sites/walmart.conf';
+    const EXAMPLE = 'data/example.conf';
 
     private $fileName;
     private $dest;
@@ -15,7 +15,8 @@ class Laradock
 
     public function setDest()
     {
-        $this->dest = '/home/hermes/pluggto/laradock/nginx/sites/'.$this->fileName.'.conf';
+        $this->path = readline('Digite o caminho do seu laradock: ');
+        $this->dest = $this->path . '/nginx/sites/' . $this->fileName . '.conf';
     }
 
     public function getFileName()
@@ -23,9 +24,9 @@ class Laradock
         return $this->fileName;
     }
 
-    private function copyOriginalToSource()
+    private function copyExampleToNew()
     {
-        copy(self::SOURCE, $this->dest);
+        copy(self::EXAMPLE, $this->dest);
     }
 
     public function replaceOriginalToFileName()
@@ -34,14 +35,14 @@ class Laradock
 
         if ($this->fileName) {
             $this->setDest();
-            $this->copyOriginalToSource();
+            $this->copyExampleToNew();
         }
 
         $data = file($this->dest);
         $finalData  = [];
 
         foreach ($data as $value) {
-            $finalData[] = str_replace('walmart', $this->fileName, $value);
+            $finalData[] = str_replace('example', $this->fileName, $value);
         }
 
         file_put_contents($this->dest, $finalData);
